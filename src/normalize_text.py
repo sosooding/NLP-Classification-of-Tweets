@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from emoji import demojize
+from gingerit.gingerit import GingerIt
 
 def remove_HTML_tags(text):
 	'''
@@ -108,9 +109,17 @@ def remove_links_all(text):
     
     return ' '.join([re.sub(r'(https?://\S+)','',word)for word in text.split()])
 
+def spellcheck(text):
+
+	parser = GingerIt()
+
+	text = parser.parse(text)['result']
+
+	return text
+
 def normalize(text, remove_HTML = True, convert_accented = True, expand_contractions = True,
 	remove_special = True, lowercase_text = True, numberwords_numeric = True, remove_stopwords = True, 
-	remove_names = True, remove_links = True):
+	remove_names = True, remove_links = True, correct_spelling = False):
 
 	if lowercase_text:
 		text = lowercase_text_all(text)
@@ -147,6 +156,9 @@ def normalize(text, remove_HTML = True, convert_accented = True, expand_contract
 
 	if remove_stopwords:
 		text = remove_stopwords_all(text)
+
+	if correct_spelling:
+		text = spellcheck(text)
 
 	text = word_tokenize(text)
 	lemmatizer = WordNetLemmatizer()

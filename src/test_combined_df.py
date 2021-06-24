@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
 	cnt = 1
 
-	for i in range(3000):
+	for i in range(10000):
 
 		print(cnt)
 
