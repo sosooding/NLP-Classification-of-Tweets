@@ -50,13 +50,13 @@ def remove_names_all(text):
 def remove_special_chars(text):
 
 	'''
-	'Solitude is not the absence of Love❤️' is converted to
+	'Solitude is not the absence of Love❤️ 123' is converted to
 	'Solitude is not the absence of Love red_heart'.
 
 	Note: #s are not removed due to the dataset having tweets.
 	'''
 
-	pattern = r'[^#a-zA-z0-9\s]'
+	pattern = r'[^#a-zA-z\s]'
 
 	text = demojize(text)
 	text = ' '.join(text.split(':'))
