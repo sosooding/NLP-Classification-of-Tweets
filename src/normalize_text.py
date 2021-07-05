@@ -97,12 +97,13 @@ def remove_stopwords_all(text):
 	'feeling good .'
 	'''
 
+	whitelist = ['not', 'no']
 	stop_words = stopwords.words('english')
 
 	text = word_tokenize(text)
 	ret = []
 	for word in text:
-		if word.lower() not in stop_words:
+		if word.lower() in whitelist or word.lower() not in stop_words:
 			ret.append(word)
 	return ' '.join(ret)
 
@@ -123,7 +124,7 @@ def translate_all(text):
 	return translator.translate(text).text
 
 def normalize(text, remove_HTML = True, convert_accented = True, expand_contractions = True,
-	remove_special = True, lowercase_text = True, numberwords_numeric = True, remove_stopwords = True, 
+	remove_special = True, lowercase_text = True, numberwords_numeric = True, remove_stopwords = False, 
 	remove_names = True, remove_links = True, correct_spelling = False, translate = False):
 
 	if lowercase_text:

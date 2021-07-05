@@ -1,6 +1,8 @@
 import pandas as pd
 import gensim 
 import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 
 def tweet_vector(tokens, size):
     ret = np.zeros(size).reshape((1, size))
@@ -16,11 +18,9 @@ def tweet_vector(tokens, size):
     return ret
 
 #Training the model
-train = pd.read_csv("../data/train_combined.csv")
-test = pd.read_csv("../data/test_combined.csv")
-
-combined = train.append(test, ignore_index = True, sort = True)
-
+combined = pd.read_csv("../data/50k_combined.csv")
+'''
+print("Training")
 tokenized_tweet = combined['Cleaned'].apply(lambda x: x.split())
 model_w2v = gensim.models.Word2Vec(
             tokenized_tweet,
@@ -35,16 +35,21 @@ model_w2v = gensim.models.Word2Vec(
 
 model_w2v.train(tokenized_tweet, total_examples= len(combined['Cleaned']), epochs=50)
 model_w2v.save("../models/word2vec1.model")
+'''
+print("Trained")
 
 # Applying the trained model
 model = gensim.models.Word2Vec.load("../models/word2vec1.model")
-df = pd.read_csv('../data/test_combined.csv')
-l = []
+df1 = pd.read_csv('../data/50k_combined.csv')
+X = []
 cnt = 1
-for i in df['Cleaned']:
-    vec = tweet_vector(i.split(), 300)
-    l.append(vec)
+for i in df1['Cleaned']:
+    vec = tweet_vector(i.split(), 300)[0]
+    X.append(vec)
     cnt += 1
 
-df['W2V_Embedding'] = l
-df.to_csv('../data/test_combined_embedded.csv')
+print("Embedded")
+
+
+df1['W2V_Embedding'] = X
+df1.to_csv('../data/50k_combined_embedded.csv')
